@@ -50,14 +50,17 @@ io.on("connection", (socket) => {
     //send player list to room
     socket.on('update_player_list', (data) => {
         socket.to(data.room).emit('recieve_updated_player_list', {players: data.players});
-        console.log(data.players);
     })
 
     //emit player choices to room
     socket.on('player_choice', (data) => {
         socket.to(data.room).emit('recieve_player_choices', 
-        {user: data.username, id: data.socket.id, choice: data.choiceID, room: data.roomNum});
-        console.log(`user ${data.username} chose answer ${data.choiceID}`);
+        {token: data.token, choice: data.choice});
+    })
+    
+    //emit player choices to room
+    socket.on('assign_tokenId', (data) => {
+        socket.to(data.room).emit('recieve_token_index', data.players);
     })
 
 })
