@@ -9,8 +9,8 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        // origin: "https://risky-quizness.netlify.app",
-        origin: "http://localhost:3000",
+        origin: "https://risky-quizness.netlify.app",
+        // origin: "http://localhost:3000",
         methods: ['GET', 'POST'],
     },
 });
@@ -51,6 +51,7 @@ io.on("connection", (socket) => {
     //send player list to room
     socket.on('update_player_list', (data) => {
         socket.to(data.room).emit('recieve_updated_player_list', {players: data.players});
+        console.log(data.players);
     })
 
     //emit player choices to room
@@ -62,6 +63,12 @@ io.on("connection", (socket) => {
     //emit player choices to room
     socket.on('assign_tokenId', (data) => {
         socket.to(data.room).emit('recieve_token_index', data.players);
+    })
+   
+    //emit final results
+    socket.on('assign_tokenId', (data) => {
+        socket.to(data.room).emit('recieve_final_results', 
+        {username: data.username, score: data.score});
     })
 
 })
