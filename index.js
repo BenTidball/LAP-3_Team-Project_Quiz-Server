@@ -66,11 +66,16 @@ io.on("connection", (socket) => {
     })
    
     //emit final results
-    socket.on('assign_tokenId', (data) => {
-        socket.to(data.room).emit('recieve_final_results', 
-        {username: data.username, score: data.score});
-    })
+    // socket.on('assign_tokenId', (data) => {
+    //     socket.to(data.room).emit('recieve_final_results', 
+    //     {username: data.username, score: data.score});
+    // })
 
+    // EXCHANGE PLAYER SCORES
+    // On Match End: When a player sends his score, the server uses this function to send that data to other players in the same room
+    socket.on('send_player_score', (data) => {
+        socket.to(data.room).emit('receive_player_score', {username: data.username, score: data.score});
+    })
 })
 
 const port = process.env.PORT || 3001;
